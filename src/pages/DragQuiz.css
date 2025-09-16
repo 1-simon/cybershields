@@ -1,0 +1,113 @@
+/* General page styling */
+.quiz-page-container {
+  background-color: #12121f; /* Dark background */
+  color: #e0e0e0;
+  min-height: 100vh;
+  font-family: 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
+  padding: 2rem 4rem;
+}
+
+/* Navigation link style */
+.quiz-nav {
+  margin-bottom: 2rem;
+}
+
+.back-link {
+  color: #a0a0b0;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: color 0.3s ease;
+}
+
+.back-link:hover {
+  color: #ffffff;
+}
+
+/* Main content alignment */
+.quiz-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.quiz-title {
+  font-size: 2.5rem;
+  font-weight: 600;
+  margin-bottom: 3rem;
+  color: #ffffff;
+}
+
+/* Container for the level cards */
+.level-cards-container {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+/* Individual level card styling */
+.level-card {
+  background-color: #1e1e2d; /* Slightly lighter dark shade for cards */
+  border-radius: 12px;
+  padding: 2rem;
+  width: 280px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  border: 1px solid #333344;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.level-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 255, 255, 0.1);
+}
+
+/* The circle with the level number */
+.level-number-circle {
+  width: 60px;
+  height: 60px;
+  background-color: #2a2a3a;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.level-number-circle span {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+.level-title {
+  font-size: 1.25rem;
+  margin: 0 0 0.5rem 0;
+  color: #ffffff;
+}
+
+.level-status {
+  font-size: 0.9rem;
+  color: #a0a0b0;
+  margin-bottom: 1.5rem;
+}
+
+/* Start Level button */
+.start-level-btn {
+  background-color: #3b82f6; /* Blue color from screenshot */
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  width: 100%;
+  transition: background-color 0.3s ease;
+}
+
+.start-level-btn:hover {
+  background-color: #2563eb; /* Slightly darker blue on hover */
+}
