@@ -2,45 +2,45 @@
 export const games = [
   {
     id: 1,
-    icon: "🧩",
-    title: "Drag & Drop Quiz",
-    subtitle: "Test with drag & drop",
-    tag: "New",
-    tagClass: "tag-new",
-    componentKey: "DragQuiz",
-    levels: [
-     {
-        level: "Easy",
-        questions: [
-          { id: 1, question: "What is phishing?", options: ["Cooking method", "Cyber attack", "Firewall", "Antivirus"], answer: "Cyber attack" },
-          { id: 2, question: "Which password is strongest?", options: ["12345", "Password", "Xy!9z#Q", "abcd"], answer: "Xy!9z#Q" },
-          { id: 3, question: "What does a firewall do?", options: ["Block threats", "Play games", "Store music", "Speed up internet"], answer: "Block threats" },
-          { id: 4, question: "Which website is secure?", options: ["http://bank-login.com", "https://bank.com", "http://shop-now.net", "http://test.org"], answer: "https://bank.com" },
-          { id: 5, question: "What is antivirus used for?", options: ["Gaming", "Cooking", "Protecting devices", "Typing documents"], answer: "Protecting devices" },
-        ],
-      },
-      {
-        level: "Medium",
-        questions: [
-          { id: 6, question: "What does HTTPS mean?", options: ["HyperText Transfer Secure", "Hyper Transfer Text Protocol", "High-Tech Transfer Service", "Home Transfer Protocol Secure"], answer: "HyperText Transfer Secure" },
-          { id: 7, question: "Which password is strongest?", options: ["Password123", "P@ssw0rd!", "qwerty", "abcd1234"], answer: "P@ssw0rd!" },
-          { id: 8, question: "Which file type is risky?", options: ["report.pdf", "notes.txt", "invoice.exe", "image.jpg"], answer: "invoice.exe" },
-          { id: 9, question: "What is a VPN used for?", options: ["Browsing securely", "Faster downloads", "Playing music", "Storing files"], answer: "Browsing securely" },
-          { id: 10, question: "Which is social engineering?", options: ["Phishing", "Antivirus", "Firewall", "Router"], answer: "Phishing" },
-        ],
-      },
-      {
-        level: "Hard",
-        questions: [
-          { id: 11, question: "What is ransomware?", options: ["Malware demanding payment", "Free software", "Antivirus", "Firewall"], answer: "Malware demanding payment" },
-          { id: 12, question: "Which attack tricks users into revealing info?", options: ["Phishing", "Encryption", "Hashing", "VPN"], answer: "Phishing" },
-          { id: 13, question: "What does 2FA provide?", options: ["Extra security layer", "Faster internet", "Free storage", "More emails"], answer: "Extra security layer" },
-          { id: 14, question: "Which is safer for storing passwords?", options: ["Plain text", "Hashed", "Notebook", "Excel file"], answer: "Hashed" },
-          { id: 15, question: "What is a DDoS attack?", options: ["Overloading a server", "Encrypting data", "Resetting passwords", "Installing updates"], answer: "Overloading a server" },
-        ],
-      },
-    ],
-  },
+   icon: "☁️",
+  title: "Cloud Computing Quiz",
+  subtitle: "Test your cloud knowledge",
+  tag: "Pro",
+  tagClass: "tag-pro",
+  componentKey: "CloudQuiz",
+  levels: [
+    {
+      level: "Easy",
+      questions: [
+        { id: 1, question: "What is cloud computing?", options: ["Cooking in the sky", "Storing data on remote servers", "Flying drones", "A gaming platform"], answer: "Storing data on remote servers" },
+        { id: 2, question: "Which company provides cloud services?", options: ["AWS", "Spotify", "Netflix", "Adobe Photoshop"], answer: "AWS" },
+        { id: 3, question: "Which is a cloud storage service?", options: ["Google Drive", "Windows Media Player", "MS Paint", "Notepad"], answer: "Google Drive" },
+        { id: 4, question: "What does SaaS stand for?", options: ["Software as a Service", "Storage as a System", "Secure as a Standard", "Server as a Software"], answer: "Software as a Service" },
+        { id: 5, question: "Which device can access cloud services?", options: ["Only desktops", "Only mobile", "Any device with internet", "Only smart TVs"], answer: "Any device with internet" },
+      ],
+    },
+    {
+      level: "Medium",
+      questions: [
+        { id: 6, question: "What does IaaS provide?", options: ["Virtualized hardware resources", "Music streaming", "Photo editing", "Social networking"], answer: "Virtualized hardware resources" },
+        { id: 7, question: "Which is a benefit of cloud computing?", options: ["Scalability", "Slower speed", "Higher cost", "Offline-only access"], answer: "Scalability" },
+        { id: 8, question: "Which is a PaaS example?", options: ["Heroku", "Microsoft Word", "Spotify", "Instagram"], answer: "Heroku" },
+        { id: 9, question: "Which protocol secures cloud data transfer?", options: ["FTP", "HTTP", "HTTPS", "POP3"], answer: "HTTPS" },
+        { id: 10, question: "Which is a private cloud?", options: ["Cloud used by one organization only", "Cloud for gaming", "Cloud without internet", "Cloud with free access"], answer: "Cloud used by one organization only" },
+      ],
+    },
+    {
+      level: "Hard",
+      questions: [
+        { id: 11, question: "What does multi-tenancy mean in cloud?", options: ["Multiple users sharing same resources", "Single user only", "Offline access", "Unlimited storage"], answer: "Multiple users sharing same resources" },
+        { id: 12, question: "Which cloud model offers the highest control?", options: ["IaaS", "PaaS", "SaaS", "BaaS"], answer: "IaaS" },
+        { id: 13, question: "What is cloud elasticity?", options: ["Expanding & shrinking resources as needed", "Cloud stretching in the sky", "More storage only", "Unlimited free access"], answer: "Expanding & shrinking resources as needed" },
+        { id: 14, question: "Which is a hybrid cloud?", options: ["Mix of public & private cloud", "Cloud with two colors", "Cloud gaming service", "Cloud with only free storage"], answer: "Mix of public & private cloud" },
+        { id: 15, question: "Which security concern is common in cloud?", options: ["Data breaches", "Slow typing", "Printer errors", "Wi-Fi password reset"], answer: "Data breaches" },
+      ],
+    },
+  ],
+},
 
 
   {
