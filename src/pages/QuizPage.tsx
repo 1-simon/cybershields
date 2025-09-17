@@ -25,24 +25,25 @@ const QuizPage: React.FC<QuizPageProps> = ({ gameId, level, title, questions, on
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [showResult, setShowResult] = useState(false);
   const [correctCount, setCorrectCount] = useState(0);
-  const [countdown, setCountdown] = useState(3); // countdown before returning home
+  const [countdown, setCountdown] = useState(3);
 
-  // Load saved answers
   useEffect(() => {
-    const saved = localStorage.getItem(storageKey);
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      setAnswers(parsed.answers || {});
-      setProgress(parsed.progress || 0);
+    try {
+      const saved = localStorage.getItem(storageKey);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        setAnswers(parsed.answers || {});
+        setProgress(parsed.progress || 0);
+      }
+    } catch (e) {
+      console.error("Failed to load saved quiz", e);
     }
   }, [storageKey]);
 
-  // Timer for questions
   useEffect(() => {
     if (currentQuestion >= questions.length || showResult) return;
 
     setTimeLeft(15);
-
     const timer = setInterval(() => {
       setTimeLeft((prev) => {
         if (prev <= 1) {
@@ -64,28 +65,29 @@ const QuizPage: React.FC<QuizPageProps> = ({ gameId, level, title, questions, on
   }, [currentQuestion, showResult]);
 
   const handleAnswer = (qId: number, option: string) => {
-    if (answers[qId]) return;
+    if (answers[qId]) return; // already answered
+
     const updated = { ...answers, [qId]: option };
     setAnswers(updated);
 
     const answeredCount = Object.keys(updated).length;
     const newProgress = Math.round((answeredCount / questions.length) * 100);
     setProgress(newProgress);
+
+    // auto move to next question after 3s
+    setTimeout(() => {
+      if (qId === questions[currentQuestion].id) {
+        if (currentQuestion < questions.length - 1) {
+          setCurrentQuestion((prev) => prev + 1);
+        } else {
+          handleFinish();
+        }
+      }
+    }, 3000);
   };
 
-  const handleNext = () => {
-    if (currentQuestion < questions.length - 1) {
-      setCurrentQuestion(currentQuestion + 1);
-      setTimeLeft(15);
-    } else {
-      handleFinish();
-    }
-  };
-
-  // Show interactive result popup
   const handleFinish = () => {
     localStorage.setItem(storageKey, JSON.stringify({ answers, progress }));
-
     const correct = questions.reduce(
       (acc, q) => acc + (answers[q.id] === q.answer ? 1 : 0),
       0
@@ -93,7 +95,6 @@ const QuizPage: React.FC<QuizPageProps> = ({ gameId, level, title, questions, on
     setCorrectCount(correct);
     setShowResult(true);
 
-    // Start countdown before returning home
     const countdownInterval = setInterval(() => {
       setCountdown((prev) => {
         if (prev <= 1) {
@@ -104,6 +105,8 @@ const QuizPage: React.FC<QuizPageProps> = ({ gameId, level, title, questions, on
       });
     }, 1000);
   };
+
+  if (questions.length === 0) return <p>No questions available.</p>;
 
   const q = questions[currentQuestion];
 
@@ -125,31 +128,32 @@ const QuizPage: React.FC<QuizPageProps> = ({ gameId, level, title, questions, on
         <div className="quiz-question-container">
           <p className="quiz-question">{q.question}</p>
           <div className="quiz-options">
-            {q.options.map((opt) => (
-              <button
-                key={opt}
-                className={`option-btn ${answers[q.id] === opt ? "selected" : ""}`}
-                onClick={() => handleAnswer(q.id, opt)}
-                disabled={!!answers[q.id]}
-              >
-                {opt}
-              </button>
-            ))}
+            {q.options.map((opt) => {
+              const isSelected = answers[q.id] === opt;
+              const isCorrect = opt === q.answer;
+
+              let btnClass = "option-btn";
+              if (isSelected) {
+                btnClass += isCorrect
+                  ? " correct-animate"
+                  : " wrong-animate";
+              }
+              if (!isSelected && isCorrect && answers[q.id]) {
+                btnClass += " correct-animate";
+              }
+
+              return (
+                <button
+                  key={opt}
+                  className={btnClass}
+                  onClick={() => handleAnswer(q.id, opt)}
+                  disabled={!!answers[q.id]}
+                >
+                  {opt}
+                </button>
+              );
+            })}
           </div>
-          {answers[q.id] && (
-            <p className={`feedback ${answers[q.id] === q.answer ? "correct" : "wrong"}`}>
-              {answers[q.id] === q.answer ? "✅ Correct!" : `❌ Wrong! Correct: ${q.answer}`}
-            </p>
-          )}
-          {currentQuestion < questions.length - 1 && (
-            <button
-              className="next-btn animated-btn"
-              onClick={handleNext}
-              disabled={!answers[q.id]}
-            >
-              Next Question
-            </button>
-          )}
         </div>
       ) : (
         <div className="result-popup">
@@ -160,10 +164,9 @@ const QuizPage: React.FC<QuizPageProps> = ({ gameId, level, title, questions, on
         </div>
       )}
 
-      {/* Inline CSS */}
       <style>{`
         .animated-btn {
-          background-color: #1e3a8a; /* changed to match website bg */
+          background-color: #1e3a8a;
           color: white;
           padding: 10px 20px;
           border: none;
@@ -171,74 +174,60 @@ const QuizPage: React.FC<QuizPageProps> = ({ gameId, level, title, questions, on
           cursor: pointer;
           transition: transform 0.2s, background-color 0.2s, box-shadow 0.2s;
         }
-        .animated-btn:hover {
-          transform: scale(1.05);
-          background-color: #3b82f6;
-          box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-        }
-        .animated-btn:active {
-          transform: scale(0.95);
-          box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-        }
-        .back-btn { margin-bottom: 20px; }
-        .next-btn { margin-top: 20px; }
+        .animated-btn:hover { transform: scale(1.05); background-color: #3b82f6; }
+        .animated-btn:active { transform: scale(0.95); }
+
         .option-btn {
           margin: 5px;
-          padding: 10px 15px;
-          border-radius: 5px;
-          border: 1px solid #1e3a8a;
+          padding: 12px 18px;
+          border-radius: 8px;
+          border: 2px solid #1e3a8a;
           cursor: pointer;
-          transition: transform 0.2s, background-color 0.2s, color 0.2s;
-        }
-        .option-btn:hover:not(:disabled) {
-          transform: scale(1.05);
-          background-color: #1e3a8a;
-          color: white;
-        }
-        .option-btn.selected {
-          background-color: #3b82f6;
-          color: white;
-        }
-        .option-btn:disabled {
-          opacity: 0.6;
-          cursor: not-allowed;
-        }
-        .progress-bar {
-          width: 100%;
-          background-color: #e5e7eb;
-          height: 10px;
-          border-radius: 5px;
-          margin-bottom: 15px;
-          overflow: hidden;
-        }
-        .progress-fill {
-          height: 100%;
-          background-color: #3b82f6;
-          transition: width 0.3s;
-        }
-        .timer {
           font-weight: bold;
-          margin-bottom: 15px;
+          background-color: white;
+          color: #1e3a8a;
+          transition: transform 0.2s, color 0.2s, background-color 0.2s, box-shadow 0.3s;
         }
-        .result-popup {
-          position: fixed;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          background-color: #1e40af; /* website theme */
+
+        .correct-animate {
+          border-color: #16a34a;
           color: white;
-          padding: 40px 60px;
-          border-radius: 12px;
-          box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-          text-align: center;
-          opacity: 0;
-          animation: slideFadeIn 0.5s forwards;
-          font-family: 'Arial', sans-serif;
+          background-color: #16a34a;
+          animation: pulse 0.6s ease-in-out;
         }
-        @keyframes slideFadeIn {
-          0% { transform: translate(-50%, -60%); opacity: 0; }
-          100% { transform: translate(-50%, -50%); opacity: 1; }
+        @keyframes pulse {
+          0% { transform: scale(1); box-shadow: 0 0 0 #16a34a; }
+          50% { transform: scale(1.1); box-shadow: 0 0 15px #16a34a; }
+          100% { transform: scale(1); box-shadow: 0 0 0 #16a34a; }
         }
+
+        .wrong-animate {
+          border-color: #dc2626;
+          color: white;
+          background-color: #dc2626;
+          animation: shake 0.6s ease;
+        }
+        @keyframes shake {
+          0% { transform: translateX(0); }
+          20% { transform: translateX(-5px); }
+          40% { transform: translateX(5px); }
+          60% { transform: translateX(-5px); }
+          80% { transform: translateX(5px); }
+          100% { transform: translateX(0); }
+        }
+
+        .progress-bar { width: 100%; background-color: #e5e7eb; height: 10px; border-radius: 5px; margin-bottom: 15px; overflow: hidden; }
+        .progress-fill { height: 100%; background-color: #3b82f6; transition: width 0.3s; }
+        .timer { font-weight: bold; margin-bottom: 15px; }
+
+        .result-popup {
+          position: fixed; top: 50%; left: 50%;
+          transform: translate(-50%, -50%);
+          background-color: #1e40af; color: white; padding: 40px 60px; border-radius: 12px;
+          box-shadow: 0 10px 30px rgba(0,0,0,0.3); text-align: center; opacity: 0;
+          animation: slideFadeIn 0.5s forwards; font-family: 'Arial', sans-serif;
+        }
+        @keyframes slideFadeIn { 0% { transform: translate(-50%, -60%); opacity: 0; } 100% { transform: translate(-50%, -50%); opacity: 1; } }
       `}</style>
     </div>
   );

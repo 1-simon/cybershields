@@ -44,7 +44,7 @@ const Navbar: React.FC = () => {
   onClick={handleBack} // Go back to main page / deselect game
   style={{ cursor: "pointer" }} // optional, indicates clickable
 >
-  CYBER<span>SHIELDS</span>
+  CYBER<span>WALA</span>
 </div>
 <style>
   {`
@@ -67,9 +67,6 @@ const Navbar: React.FC = () => {
       <ul>
         <NavLink to="/">
           <li>🛡 Games</li>
-        </NavLink>
-        <NavLink to="">
-          <li>🧠 Quiz</li>
         </NavLink>
         <li>🏆 {completedGames}/{games.length}</li>
         <li>⭐ {overallProgress}%</li>
