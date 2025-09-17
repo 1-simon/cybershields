@@ -2,7 +2,7 @@ import React from "react";
 
 const Footer: React.FC = () => {
   return (
-    <footer>
+    <footer id="footer">
       <div>
         <img src="logo1.png" alt="College Logo" />
         <img src="logo2.png" alt="Club Logo" />
@@ -12,6 +12,12 @@ const Footer: React.FC = () => {
         Activity Director of <b style={{ color: "orange" }}>Quick Heal Cyber Warrior Club</b>, 
         Priyadarshini College of Engineering.
       </div>
+
+      <iframe 
+    src="https://bots.easy-peasy.ai/bot/31aa19ea-49f8-4af7-9887-deb1fada548b?mode=iframe" 
+    width="400" 
+    height="500">
+  </iframe>
     </footer>
   );
 };
