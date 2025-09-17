@@ -1,0 +1,24 @@
+/* Footer.css */
+#footer {
+  /* Add your footer styling here */
+  text-align: center;
+  padding: 20px;
+  background-color: #282c34;
+  color: white;
+}
+
+.footer-logos img {
+  width: 80px; /* Example size */
+  margin: 0 15px;
+}
+
+/* Classes to replace inline styles */
+.creator-name {
+  color: lightgreen;
+  font-weight: bold;
+}
+
+.club-name {
+  color: orange;
+  font-weight: bold;
+}

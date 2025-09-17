@@ -1,7 +1,7 @@
 // pages/Gamepage.tsx
 import React, { useState, useEffect } from "react";
 import QuizPage from "./QuizPage";
-import "../pages/DragQuiz.css"; // Your level card styles
+import "../pages/DragQuiz.css"; // keep your existing styles
 
 interface Question {
   id: number;
@@ -25,6 +25,7 @@ interface GamepageProps {
 const Gamepage: React.FC<GamepageProps> = ({ gameId, title, onBack, levels }) => {
   const [selectedLevel, setSelectedLevel] = useState<Level | null>(null);
   const [levelProgress, setLevelProgress] = useState<Record<string, number>>({});
+  const [backAnimating, setBackAnimating] = useState(false);
 
   useEffect(() => {
     const progressData: Record<string, number> = {};
@@ -34,6 +35,13 @@ const Gamepage: React.FC<GamepageProps> = ({ gameId, title, onBack, levels }) =>
     });
     setLevelProgress(progressData);
   }, [levels, gameId]);
+
+  const handleBack = () => {
+    setBackAnimating(true);
+    setTimeout(() => {
+      onBack();
+    }, 300); // duration must match CSS
+  };
 
   if (selectedLevel) {
     return (
@@ -48,9 +56,29 @@ const Gamepage: React.FC<GamepageProps> = ({ gameId, title, onBack, levels }) =>
   }
 
   return (
-    <div className="quiz-page-container">
+    <div className={`quiz-page-container ${backAnimating ? "fade-out" : ""}`}>
+      {/* Embedded CSS for animation + styling */}
+      <style>
+        {`
+          .animated-back {
+            transition: transform 0.3s ease, opacity 0.3s ease;
+          }
+          .animated-back:hover {
+            transform: translateX(-5px);
+          }
+          .fade-out {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+          }
+          .level-card.completed {
+            border: 2px solid #4ade80;
+            background-color: #f0fff4;
+          }
+        `}
+      </style>
+
       <nav className="quiz-nav">
-        <button onClick={onBack} className="back-link">
+        <button onClick={handleBack} className="back-link animated-back">
           &larr; Back
         </button>
       </nav>
@@ -63,13 +91,19 @@ const Gamepage: React.FC<GamepageProps> = ({ gameId, title, onBack, levels }) =>
           const isCompleted = progress === 100;
 
           return (
-            <div key={lvl.level} className="level-card" onClick={() => setSelectedLevel(lvl)}>
+            <div
+              key={lvl.level}
+              className={`level-card ${isCompleted ? "completed" : ""}`}
+              onClick={() => setSelectedLevel(lvl)}
+            >
               <div className="level-number-circle">
                 <span>{index + 1}</span>
               </div>
               <h2 className="level-title">{lvl.level}</h2>
               <p className="level-status">
-                {isCompleted ? `Completed (${progress}%)` : `${lvl.questions.length} Questions`}
+                {isCompleted
+                  ? `Completed (${progress}%)`
+                  : `Score: ${progress}%`}
               </p>
               <button className="start-level-btn">
                 {isCompleted ? "Completed" : "Start Level"}
