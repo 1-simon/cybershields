@@ -1,7 +1,7 @@
 // pages/Gamepage.tsx
 import React, { useState, useEffect } from "react";
 import QuizPage from "./QuizPage";
-import "../pages/DragQuiz.css"; // keep your existing styles
+import "../pages/DragQuiz.css";
 
 interface Question {
   id: number;
@@ -27,16 +27,6 @@ const Gamepage: React.FC<GamepageProps> = ({ gameId, title, onBack, levels }) =>
   const [levelProgress, setLevelProgress] = useState<Record<string, number>>({});
   const [backAnimating, setBackAnimating] = useState(false);
 
-  // Load progress from localStorage
-  useEffect(() => {
-    const progressData: Record<string, number> = {};
-    levels.forEach((lvl) => {
-      const saved = localStorage.getItem(`game-${gameId}-level-${lvl.level}`);
-      progressData[lvl.level] = saved ? JSON.parse(saved).progress || 0 : 0;
-    });
-    setLevelProgress(progressData);
-  }, [levels, gameId]);
-
   const handleBack = () => {
     setBackAnimating(true);
     setTimeout(() => {
@@ -44,12 +34,24 @@ const Gamepage: React.FC<GamepageProps> = ({ gameId, title, onBack, levels }) =>
     }, 300);
   };
 
+  // Load progress whenever we mount OR come back from a quiz
+  useEffect(() => {
+    if (selectedLevel !== null) return; // only reload when back at game page
+
+    const progressData: Record<string, number> = {};
+    levels.forEach((lvl) => {
+      const saved = localStorage.getItem(`game-${gameId}-level-${lvl.level}`);
+      progressData[lvl.level] = saved ? JSON.parse(saved).progress || 0 : 0;
+    });
+    setLevelProgress(progressData);
+  }, [levels, gameId, selectedLevel]);
+
   // Reset all quiz progress
   const handleReset = () => {
     levels.forEach((lvl) => {
       localStorage.removeItem(`game-${gameId}-level-${lvl.level}`);
     });
-    // Reset state
+
     const resetProgress: Record<string, number> = {};
     levels.forEach((lvl) => (resetProgress[lvl.level] = 0));
     setLevelProgress(resetProgress);
@@ -69,75 +71,40 @@ const Gamepage: React.FC<GamepageProps> = ({ gameId, title, onBack, levels }) =>
 
   return (
     <div className={`quiz-page-container ${backAnimating ? "fade-out" : ""}`}>
-      <style>
-        {`
-          .animated-back {
-            transition: transform 0.3s ease, opacity 0.3s ease;
-          }
-          .animated-back:hover {
-            transform: translateX(-5px);
-          }
-          .fade-out {
-            opacity: 0;
-            transition: opacity 0.3s ease;
-          }
-          .level-card.completed {
-            border: 2px solid #4ade80;
-            background-color: #f0fff4;
-          }
-          .reset-btn {
-            margin: 15px 0;
-            padding: 8px 16px;
-            background-color: #f87171;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-          }
-          .reset-btn:hover {
-            background-color: #ef4444;
-          }
-        `}
-      </style>
+      <style>{`
+        .animated-back {
+          transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+        .animated-back:hover {
+          transform: translateX(-5px);
+        }
+        .fade-out {
+          opacity: 0;
+          transition: opacity 0.3s ease;
+        }
+        .level-card.completed {
+          border: 2px solid #4ade80;
+          background-color: #f0fff4;
+        }
+        .reset-btn {
+          margin: 15px 0;
+          padding: 8px 16px;
+          background-color: #f87171;
+          color: white;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+        }
+        .reset-btn:hover {
+          background-color: #ef4444;
+        }
+      `}</style>
 
       <nav className="quiz-nav">
         <button onClick={handleBack} className="back-link animated-back">
           &larr; Back
         </button>
       </nav>
-
-
-
-<style>
-  {`
-    .animated-back {
-      padding: 8px 16px;
-      background-color: #3b82f6; /* Blue */
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    }
-
-    /* Hover effect */
-    .animated-back:hover {
-      transform: translateY(-3px) scale(1.05);
-      background-color: #2563eb; /* Darker blue */
-      box-shadow: 0 6px 10px rgba(0,0,0,0.15);
-    }
-
-    /* Click effect */
-    .animated-back:active {
-      transform: translateY(1px) scale(0.98);
-      box-shadow: 0 3px 5px rgba(0,0,0,0.1);
-    }
-  `}
-</style>
-
-
 
       <h1 className="quiz-title">{title}</h1>
 

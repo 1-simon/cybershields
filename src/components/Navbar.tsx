@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { NavLink } from "react-router-dom"; 
+import { NavLink } from "react-router-dom";
 import { games } from "../data/games";
 
 const Navbar: React.FC = () => {
   const [completedGames, setCompletedGames] = useState(0);
   const [overallProgress, setOverallProgress] = useState(0);
 
-  useEffect(() => {
+  const calculateProgress = () => {
     let completedCount = 0;
     let totalProgress = 0;
 
@@ -31,6 +31,19 @@ const Navbar: React.FC = () => {
 
     setCompletedGames(completedCount);
     setOverallProgress(Math.round(totalProgress / games.length));
+  };
+
+  useEffect(() => {
+    // Run once at mount
+    calculateProgress();
+
+    // Listen for custom progress update events
+    const handleProgressUpdate = () => calculateProgress();
+    window.addEventListener("progressUpdated", handleProgressUpdate);
+
+    return () => {
+      window.removeEventListener("progressUpdated", handleProgressUpdate);
+    };
   }, []);
 
   function handleBack() {
@@ -39,31 +52,33 @@ const Navbar: React.FC = () => {
 
   return (
     <nav>
-    <div 
-  className="logo clickable-logo"
-  onClick={handleBack} // Go back to main page / deselect game
-  style={{ cursor: "pointer" }} // optional, indicates clickable
->
-  CYBER<span>WALA</span>
-</div>
-<style>
-  {`
-    .clickable-logo {
-      font-size: 24px;
-      font-weight: bold;
-      color: #3b82f6;
-      user-select: none;
-      transition: transform 0.2s ease, color 0.2s ease;
-    }
-    .clickable-logo span {
-      color: #f87171;
-    }
-    .clickable-logo:hover {
-      transform: scale(1.05);
-      color: #2563eb;
-    }
-  `}
-</style>
+      <div
+        className="logo clickable-logo"
+        onClick={handleBack}
+        style={{ cursor: "pointer" }}
+      >
+        CYBER<span>WALLAH</span>
+      </div>
+
+      <style>
+        {`
+          .clickable-logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #3b82f6;
+            user-select: none;
+            transition: transform 0.2s ease, color 0.2s ease;
+          }
+          .clickable-logo span {
+            color: #f87171;
+          }
+          .clickable-logo:hover {
+            transform: scale(1.05);
+            color: #2563eb;
+          }
+        `}
+      </style>
+
       <ul>
         <NavLink to="/">
           <li>🛡 Games</li>

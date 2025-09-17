@@ -16,7 +16,13 @@ interface QuizPageProps {
   onBack: () => void;
 }
 
-const QuizPage: React.FC<QuizPageProps> = ({ gameId, level, title, questions, onBack }) => {
+const QuizPage: React.FC<QuizPageProps> = ({
+  gameId,
+  level,
+  title,
+  questions,
+  onBack,
+}) => {
   const storageKey = `game-${gameId}-level-${level}`;
 
   const [answers, setAnswers] = useState<Record<number, string>>({});
@@ -27,19 +33,27 @@ const QuizPage: React.FC<QuizPageProps> = ({ gameId, level, title, questions, on
   const [correctCount, setCorrectCount] = useState(0);
   const [countdown, setCountdown] = useState(3);
 
+  // Load saved state
   useEffect(() => {
     try {
       const saved = localStorage.getItem(storageKey);
       if (saved) {
         const parsed = JSON.parse(saved);
         setAnswers(parsed.answers || {});
-        setProgress(parsed.progress || 0);
       }
     } catch (e) {
       console.error("Failed to load saved quiz", e);
     }
   }, [storageKey]);
 
+  // Keep progress in sync with answers
+  useEffect(() => {
+    const answeredCount = Object.keys(answers).length;
+    const newProgress = Math.round((answeredCount / questions.length) * 100);
+    setProgress(newProgress);
+  }, [answers, questions.length]);
+
+  // Timer for each question
   useEffect(() => {
     if (currentQuestion >= questions.length || showResult) return;
 
@@ -62,7 +76,7 @@ const QuizPage: React.FC<QuizPageProps> = ({ gameId, level, title, questions, on
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [currentQuestion, showResult]);
+  }, [currentQuestion, showResult, questions]);
 
   const handleAnswer = (qId: number, option: string) => {
     if (answers[qId]) return; // already answered
@@ -70,28 +84,34 @@ const QuizPage: React.FC<QuizPageProps> = ({ gameId, level, title, questions, on
     const updated = { ...answers, [qId]: option };
     setAnswers(updated);
 
-    const answeredCount = Object.keys(updated).length;
-    const newProgress = Math.round((answeredCount / questions.length) * 100);
-    setProgress(newProgress);
-
     // auto move to next question after 3s
     setTimeout(() => {
       if (qId === questions[currentQuestion].id) {
         if (currentQuestion < questions.length - 1) {
           setCurrentQuestion((prev) => prev + 1);
         } else {
-          handleFinish();
+          handleFinish(updated); // pass latest answers
         }
       }
     }, 3000);
   };
 
-  const handleFinish = () => {
-    localStorage.setItem(storageKey, JSON.stringify({ answers, progress }));
+  const handleFinish = (finalAnswers: Record<number, string> = answers) => {
+    // Compute correct progress fresh
+    const answeredCount = Object.keys(finalAnswers).length;
+    const finalProgress = Math.round((answeredCount / questions.length) * 100);
+
+    localStorage.setItem(
+      storageKey,
+      JSON.stringify({ answers: finalAnswers, progress: finalProgress })
+    );
+    window.dispatchEvent(new Event("progressUpdated"));
+
     const correct = questions.reduce(
-      (acc, q) => acc + (answers[q.id] === q.answer ? 1 : 0),
+      (acc, q) => acc + (finalAnswers[q.id] === q.answer ? 1 : 0),
       0
     );
+
     setCorrectCount(correct);
     setShowResult(true);
 
@@ -116,7 +136,9 @@ const QuizPage: React.FC<QuizPageProps> = ({ gameId, level, title, questions, on
         &larr; Back
       </button>
 
-      <h1 className="quiz-title">{title} - {level}</h1>
+      <h1 className="quiz-title">
+        {title} - {level}
+      </h1>
 
       <div className="progress-bar">
         <div className="progress-fill" style={{ width: `${progress}%` }} />
@@ -134,9 +156,7 @@ const QuizPage: React.FC<QuizPageProps> = ({ gameId, level, title, questions, on
 
               let btnClass = "option-btn";
               if (isSelected) {
-                btnClass += isCorrect
-                  ? " correct-animate"
-                  : " wrong-animate";
+                btnClass += isCorrect ? " correct-animate" : " wrong-animate";
               }
               if (!isSelected && isCorrect && answers[q.id]) {
                 btnClass += " correct-animate";
@@ -158,7 +178,9 @@ const QuizPage: React.FC<QuizPageProps> = ({ gameId, level, title, questions, on
       ) : (
         <div className="result-popup">
           <h2>🎉 Quiz Completed! 🎉</h2>
-          <p>Correct Answers: {correctCount} / {questions.length}</p>
+          <p>
+            Correct Answers: {correctCount} / {questions.length}
+          </p>
           <p>Progress: {progress}%</p>
           <p>Returning Home in {countdown}...</p>
         </div>
@@ -216,8 +238,19 @@ const QuizPage: React.FC<QuizPageProps> = ({ gameId, level, title, questions, on
           100% { transform: translateX(0); }
         }
 
-        .progress-bar { width: 100%; background-color: #e5e7eb; height: 10px; border-radius: 5px; margin-bottom: 15px; overflow: hidden; }
-        .progress-fill { height: 100%; background-color: #3b82f6; transition: width 0.3s; }
+        .progress-bar {
+          width: 100%;
+          background-color: #e5e7eb;
+          height: 10px;
+          border-radius: 5px;
+          margin-bottom: 15px;
+          overflow: hidden;
+        }
+        .progress-fill {
+          height: 100%;
+          background-color: #3b82f6;
+          transition: width 0.3s;
+        }
         .timer { font-weight: bold; margin-bottom: 15px; }
 
         .result-popup {
@@ -227,7 +260,10 @@ const QuizPage: React.FC<QuizPageProps> = ({ gameId, level, title, questions, on
           box-shadow: 0 10px 30px rgba(0,0,0,0.3); text-align: center; opacity: 0;
           animation: slideFadeIn 0.5s forwards; font-family: 'Arial', sans-serif;
         }
-        @keyframes slideFadeIn { 0% { transform: translate(-50%, -60%); opacity: 0; } 100% { transform: translate(-50%, -50%); opacity: 1; } }
+        @keyframes slideFadeIn {
+          0% { transform: translate(-50%, -60%); opacity: 0; }
+          100% { transform: translate(-50%, -50%); opacity: 1; }
+        }
       `}</style>
     </div>
   );

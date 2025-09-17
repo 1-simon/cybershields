@@ -4,7 +4,7 @@ const Hero: React.FC = () => {
   return (
     <div className="hero">
       <h1>
-        Welcome to <span>CyberWala</span>
+        Welcome to <span>CyberWallah</span>
       </h1>
       <p>
         Master cybersecurity through interactive games and challenges. Learn
