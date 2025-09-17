@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import "./App.css";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
-import Stats from "./components/Stats";
 import GameCard from "./components/GameCard";
 import Footer from "./components/Footer";
 import { games } from "./data/games";
@@ -53,7 +52,7 @@ const App: React.FC = () => {
       ) : (
         <>
           <Hero />
-          <Stats />
+          
           <div className="container">
             {games.map((game) => (
               <GameCard

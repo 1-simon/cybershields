@@ -33,11 +33,37 @@ const Navbar: React.FC = () => {
     setOverallProgress(Math.round(totalProgress / games.length));
   }, []);
 
+  function handleBack() {
+    window.location.href = "/";
+  }
+
   return (
     <nav>
-      <div className="logo">
-        CYBER<span>SHIELDS</span>
-      </div>
+    <div 
+  className="logo clickable-logo"
+  onClick={handleBack} // Go back to main page / deselect game
+  style={{ cursor: "pointer" }} // optional, indicates clickable
+>
+  CYBER<span>SHIELDS</span>
+</div>
+<style>
+  {`
+    .clickable-logo {
+      font-size: 24px;
+      font-weight: bold;
+      color: #3b82f6;
+      user-select: none;
+      transition: transform 0.2s ease, color 0.2s ease;
+    }
+    .clickable-logo span {
+      color: #f87171;
+    }
+    .clickable-logo:hover {
+      transform: scale(1.05);
+      color: #2563eb;
+    }
+  `}
+</style>
       <ul>
         <NavLink to="/">
           <li>🛡 Games</li>

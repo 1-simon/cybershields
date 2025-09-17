@@ -1,5 +1,4 @@
 /* src/pages/QuizPage.css */
-
 .quiz-page {
   background-color: #12121f;
   color: #e0e0e0;
@@ -7,7 +6,6 @@
   padding: 2rem 4rem;
   font-family: 'Segoe UI', 'Roboto', sans-serif;
 }
-
 .back-btn {
   background: transparent;
   border: none;
@@ -17,11 +15,9 @@
   margin-bottom: 1.5rem;
   transition: color 0.2s ease;
 }
-
 .back-btn:hover {
   color: #60a5fa;
 }
-
 .quiz-page h1 {
   text-align: center;
   font-size: 2.2rem;
@@ -29,7 +25,6 @@
   margin-bottom: 2rem;
   color: #ffffff;
 }
-
 /* Progress Bar */
 .progress-bar {
   width: 100%;
@@ -39,13 +34,11 @@
   margin: 1.5rem 0 2rem;
   overflow: hidden;
 }
-
 .progress-fill {
   height: 100%;
   background: linear-gradient(90deg, #3b82f6, #06b6d4);
   transition: width 0.4s ease-in-out;
 }
-
 /* Question Card */
 .question-card {
   background-color: #1e1e2d;
@@ -55,26 +48,22 @@
   margin-bottom: 1.5rem;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
-
 .question-card:hover {
   transform: translateY(-3px);
   box-shadow: 0 6px 20px rgba(0, 255, 255, 0.05);
 }
-
 .question-card p {
   font-size: 1.1rem;
   margin-bottom: 1rem;
   font-weight: 500;
   color: #ffffff;
 }
-
 /* Options */
 .options {
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem;
 }
-
 .option-btn {
   background: #2a2a3d;
   border: 1px solid #3b3b4d;
@@ -84,34 +73,30 @@
   color: #e0e0e0;
   cursor: pointer;
   transition: all 0.2s ease;
+  flex-grow: 1;
 }
-
 .option-btn:hover {
   background: #3b82f6;
   border-color: #3b82f6;
   color: #ffffff;
 }
-
 .option-btn.selected {
   background: #2563eb;
   border-color: #2563eb;
   color: #ffffff;
   font-weight: 600;
 }
-
 /* Feedback */
 .correct {
   margin-top: 0.5rem;
   color: #22c55e;
   font-size: 0.9rem;
 }
-
 .wrong {
   margin-top: 0.5rem;
   color: #ef4444;
   font-size: 0.9rem;
 }
-
 /* Submit button */
 .submit-btn {
   margin-top: 2rem;
@@ -128,8 +113,43 @@
   margin-right: auto;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
-
 .submit-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 15px rgba(0, 255, 255, 0.2);
+}
+/* ----------------- RESPONSIVE STYLES ----------------- */
+/* For tablets (screens smaller than 768px) */
+@media (max-width: 768px) {
+  .quiz-page {
+    padding: 2rem 2rem;
+  }
+  .quiz-page h1 {
+    font-size: 2rem;
+  }
+  .question-card p {
+    font-size: 1rem;
+  }
+}
+/* For mobile phones (screens smaller than 480px) */
+@media (max-width: 480px) {
+  .quiz-page {
+    padding: 1.5rem 1rem;
+  }
+  .quiz-page h1 {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+  }
+  .question-card {
+    padding: 1rem;
+  }
+  .options {
+    flex-direction: column;
+  }
+  .option-btn {
+    text-align: center;
+  }
+  .submit-btn {
+    width: 100%;
+    padding: 1rem;
+  }
 }

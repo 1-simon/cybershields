@@ -1,6 +1,5 @@
 /* Footer.css */
 #footer {
-  /* Add your footer styling here */
   text-align: center;
   padding: 20px;
   background-color: #282c34;
@@ -8,7 +7,7 @@
 }
 
 .footer-logos img {
-  width: 80px; /* Example size */
+  width: 80px; /* Default size for larger screens */
   margin: 0 15px;
 }
 
@@ -21,4 +20,22 @@
 .club-name {
   color: orange;
   font-weight: bold;
+}
+
+/* ======================================================= */
+/* ================== RESPONSIVE STYLES ================== */
+/* ======================================================= */
+
+/* For mobile devices (screens smaller than 480px) */
+@media (max-width: 480px) {
+  #footer {
+    /* Reduce padding on small screens */
+    padding: 15px;
+  }
+  .footer-logos img {
+    /* Make logos smaller to fit */
+    width: 50px;
+    /* Reduce the space between logos */
+    margin: 0 10px;
+  }
 }
