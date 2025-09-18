@@ -84,7 +84,7 @@ const Gamepage: React.FC<GamepageProps> = ({ gameId, title, onBack, levels }) =>
         }
         .level-card.completed {
           border: 2px solid #4ade80;
-          background-color: #f0fff4;
+          background-color: #1b1920ff;
         }
         .reset-btn {
           margin: 15px 0;
