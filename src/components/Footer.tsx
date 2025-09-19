@@ -15,7 +15,7 @@ const Footer: React.FC = () => {
     >
       {/* Chatbot iframe */}
       <iframe
-        src="https://bots.easy-peasy.ai/bot/31aa19ea-49f8-4af7-9887-deb1fada548b?mode=iframe"
+        src="https://bots.easy-peasy.ai/bot/74f4d543-8e37-40cc-9730-355fb0bf9e4b?mode=iframe"
         width="350"
         height="450"
         style={{
